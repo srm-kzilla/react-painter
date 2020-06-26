@@ -4,47 +4,37 @@ import { SketchPicker } from 'react-color';
 import "./styles.css";
 
 class CanvasComponent extends React.Component {
-    _choiceHandler = 'brush';
-    _color = 'white'
-
 
     state = {
         background: '#121212',
+        choice: 'brush',
     };
 
     handleChangeComplete = (color) => {
         this.setState({ background: color.hex });
     };
 
-
-
-
-
     componentDidMount() {
         this.updateCanvas();
     }
     updateCanvas() {
-        if (this._choiceHandler!=='brush')
-          return ;
         var isDrawing, lastPoint;
         var canvas       = this.refs.canvas,
             canvasWidth  = canvas.width,
             canvasHeight = canvas.height,
-            ctx          = canvas.getContext('2d'),
-            brush        = new Image();
-        
+            ctx          = canvas.getContext('2d');
+        var prevjob = {};
+
         ctx.beginPath();
         ctx.rect(0, 0, canvasHeight, canvasWidth);
         ctx.fillStyle = "#fff";
         ctx.fill();
-        // brush = new Image();             
-        // brush.src = "../public/htmlTest/brush.png"; // here i load the image
-        canvas.addEventListener('mousedown', handleMouseDown, false);
-        canvas.addEventListener('touchstart', handleMouseDown, false);
+        canvas.addEventListener('mousedown', handleMouseDown.bind(this), false);
+        canvas.addEventListener('touchstart', handleMouseDown.bind(this), false);
         canvas.addEventListener('mousemove', handleMouseMove.bind(this), false);
         canvas.addEventListener('touchmove', handleMouseMove.bind(this), false);
-        canvas.addEventListener('mouseup', handleMouseUp, false);
-        canvas.addEventListener('touchend', handleMouseUp, false);
+        canvas.addEventListener('mouseup', handleMouseUp.bind(this), false);
+        canvas.addEventListener('touchend', handleMouseUp.bind(this), false);
 
         function distanceBetween(point1, point2) {
         return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
@@ -100,12 +90,32 @@ class CanvasComponent extends React.Component {
         function handleMouseDown(e) {
         isDrawing = true;
         lastPoint = getMouse(e, canvas);
+        prevjob = {done:false,x:0,y:0};
         }
-
+        var pstate;
         function handleMouseMove(e) {
           if (!isDrawing) { return; }
           
           e.preventDefault();
+
+          if(this.state.choice === 'rectangle'){
+            if(prevjob.done === false){
+                prevjob.done = true;
+                pstate = canvas.toDataURL();
+            }
+            var canvasPic = new Image();
+            canvasPic.src = pstate;
+            console.log(pstate);
+            canvasPic.onload = ()=> { 
+                ctx.drawImage(canvasPic, 0, 0); 
+                ctx.fillStyle = this.state.background;
+                ctx.beginPath();
+                ctx.rect(lastPoint.x,lastPoint.y, e.clientX-lastPoint.x,e.clientY-lastPoint.y);
+                ctx.fill();
+                return ;   
+            }
+            return ;
+          }
 
           var currentPoint = getMouse(e, canvas),
               dist = distanceBetween(lastPoint, currentPoint),
@@ -136,7 +146,16 @@ class CanvasComponent extends React.Component {
         return (
           <div>
             <canvas ref="canvas" width={300} height={300}/><br/>
+            <button onClick={()=>{
+                this.setState({ choice: 'brush' });
+            }}>Brush</button>
+            
+            <button onClick={()=>{
+                this.setState({ choice: 'rectangle' });
+            }}>Rectangle</button>
+            
             <button onClick={this.updateCanvas.bind(this)}>Clear</button>
+            
             <button onClick={()=>{
                 var link = document.createElement('a');
                 link.download = 'image.png';
