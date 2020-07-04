@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>canvas draw</title>
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style type="text/css">
+		html,body
+		{
+			margin: 0;
+			width: 100%;
+			height: 100%
+		}
+		canvas
+		{
+			display: block;
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+<button id="btn">downlaod</button>
+	<script type="text/javascript">
+		var canvas=document.getElementById('canvas');
+		canvas.width = 600;
+		canvas.height = 600;
+		// var c=canvas.getContext('2d');
+		// let cjq = $('#canvas');
+		// cjq.mousemove((e)=>{
+		// 	var x = e.pageX - cjq.offset().left; 
+ 	// 		var y= e.pageY - cjq.offset().top; 
+ 	// 		c.fillRect(x,y,20,20);
+		// });
+
+
+
+
+
+$('#btn').click(function() {
+   var link = document.createElement('a');
+   link.download = 'image.png';
+   link.href = document.getElementById('canvas').toDataURL()
+   link.click();
+});
+
+
+
+$(document).ready(function(){
+    var isDrawing, lastPoint;
+    var canvas       = document.getElementById('canvas'),
+        canvasWidth  = canvas.width,
+        canvasHeight = canvas.height,
+        ctx          = canvas.getContext('2d'),
+        brush        = new Image();
+        
+
+    ctx.beginPath();
+    ctx.rect(0, 0, canvasHeight, canvasWidth);
+    ctx.fillStyle = "#121212";
+    ctx.fill();
+    
+    brush.src ='brush.png'
+    canvas.addEventListener('mousedown', handleMouseDown, false);
+    canvas.addEventListener('touchstart', handleMouseDown, false);
+    canvas.addEventListener('mousemove', handleMouseMove, false);
+    canvas.addEventListener('touchmove', handleMouseMove, false);
+    canvas.addEventListener('mouseup', handleMouseUp, false);
+    canvas.addEventListener('touchend', handleMouseUp, false);
+
+    function distanceBetween(point1, point2) {
+    return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+    }
+
+    function angleBetween(point1, point2) {
+    return Math.atan2( point2.x - point1.x, point2.y - point1.y );
+    }
+
+    function getFilledInPixels(stride) {
+    if (!stride || stride < 1) { stride = 1; }
+    
+    var pixels   = ctx.getImageData(0, 0, canvasWidth, canvasHeight),
+        pdata    = pixels.data,
+        l        = pdata.length,
+        total    = (l / stride),
+        count    = 0;
+    
+    // Iterate over all pixels
+    for(var i = count = 0; i < l; i += stride) {
+        if (parseInt(pdata[i]) === 0) {
+        count++;
+        }
+    }
+    
+    return Math.round((count / total) * 100);
+    }
+
+    function getMouse(e, canvas) {
+    var offsetX = 0, offsetY = 0, mx, my;
+
+    if (canvas.offsetParent !== undefined) {
+        do {
+        offsetX += canvas.offsetLeft;
+        offsetY += canvas.offsetTop;
+        } while ((canvas = canvas.offsetParent));
+    }
+
+    mx = (e.pageX || e.touches[0].clientX) - offsetX;
+    my = (e.pageY || e.touches[0].clientY) - offsetY;
+
+    return {x: mx, y: my};
+    }
+
+    function handlePercentage(filledInPixels) {
+        filledInPixels = filledInPixels || 0;
+        if (filledInPixels > 40) {
+            canvas.parentNode.removeChild(canvas);
+            $('#scratch-card-title').html(`Click the image to go to the Portal`);
+        }
+    }
+
+    function handleMouseDown(e) {
+    isDrawing = true;
+    lastPoint = getMouse(e, canvas);
+    }
+
+    function handleMouseMove(e) {
+    if (!isDrawing) { return; }
+    
+    e.preventDefault();
+
+    var currentPoint = getMouse(e, canvas),
+        dist = distanceBetween(lastPoint, currentPoint),
+        angle = angleBetween(lastPoint, currentPoint),
+        x, y;
+    
+    for (var i = 0; i < dist; i++) {
+        x = lastPoint.x + (Math.sin(angle) * i) - 25;
+        y = lastPoint.y + (Math.cos(angle) * i) - 25;
+        ctx.globalCompositeOperation = 'destination-out';
+        if(window.screen.width >= 756)
+        y=y-window.scrollY;
+        ctx.drawImage(brush, x, y);
+    }
+    
+    lastPoint = currentPoint;
+    handlePercentage(getFilledInPixels(32));
+    }
+
+    function handleMouseUp(e) {
+    isDrawing = false;
+    }
+});
+
+
+
+
+
+
+		// var k=10;
+		// var x=300;
+		// var y=300;
+		// var x1=innerWidth;
+		// var x2=Math.floor(x1/2);
+		// var y1 = Math.floor(Math.random() * (400 - 40) + 40);
+		// var y2 = Math.floor(Math.random() * (400 - 40) + 40);
+		// var rate=75;
+		// var alertflag=true;
+
+		// //setInterval(function()
+		// var myFunction = function() 
+		//   {
+		//   c.clearRect(0,0,innerWidth,innerHeight);  
+		//   c.fillRect(x,y,20,20);
+		//   c.fillRect(0,580,innerWidth,20);
+		//   c.fillRect(0,20,innerWidth,20);
+		//   y=y+k;
+		//   c.fillRect(x1,40,40,y1);
+		//   c.fillRect(x1,y1+180,40,400-y1);
+		//   c.fillRect(x2,40,40,y2);
+		//   c.fillRect(x2,y2+180,40,400-y2);
+		//   x1=x1-k;
+		//   x2=x2-k;
+		//   if(x1<=-40)
+		//   	{x1=innerWidth;
+		//     y1 = Math.floor(Math.random() * (400 - 40) + 40);}
+		//   if(x2<=-40)
+		//   	{x2=innerWidth;
+		//     y2 = Math.floor(Math.random() * (400 - 40) + 40);}
+		//   if((y==580 || y==40) || (x>=x1 && x<=x1+40 && !(y>=y1 && y<=y1+180)) || (x>=x2 && x<=x2+40 && !(y>=y2 && y<=y2+180)) && alertflag)
+		//     {alert("Game Over : Do you want to restart?");
+		//      alertflag=false;
+		//      location.reload(true); }
+		//      rate-=0.005;
+		//      setTimeout(myFunction, rate);
+		//   }
+		  
+		// setTimeout(myFunction, rate);
+	</script>
+</body>
+</html>
