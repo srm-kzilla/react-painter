@@ -4,13 +4,7 @@ body{
 }
 canvas{
 	box-shadow: 0 0 5px gray;
-	/*width: 300px;*/
-	/*height: 300px;*/
-	/*float: left;*/
-}
-
-.main{
-	/*display: flex;*/
+	cursor: crosshair;
 }
 .toolset{
 	float: right;
@@ -20,4 +14,5 @@ canvas{
 }
 .sketch-picker{
 	width: 115px !Important;
+	cursor: pointer;
 }
