@@ -160,7 +160,7 @@ class CanvasComponent extends React.Component {
         return;
       }
 
-      var currentPoint = getMouse(e, canvas),
+      let currentPoint = getMouse(e, canvas),
         dist = distanceBetween(lastPoint, currentPoint),
         angle = angleBetween(lastPoint, currentPoint),
         x,
