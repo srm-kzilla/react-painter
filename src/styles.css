@@ -1,0 +1,18 @@
+body{
+	margin: 0;
+	overflow: hidden;
+}
+canvas{
+	box-shadow: 0 0 5px gray;
+	cursor: crosshair;
+}
+.toolset{
+	float: right;
+	display: flex;
+	flex-direction: column;
+	padding: 5px;
+}
+.sketch-picker{
+	width: 115px !Important;
+	cursor: pointer;
+}
