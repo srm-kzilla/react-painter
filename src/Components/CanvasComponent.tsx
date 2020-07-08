@@ -17,7 +17,7 @@ class CanvasComponent extends React.Component {
     canvas: {} as HTMLCanvasElement,
   };
 
-  handleChangeComplete = (color: any) => {
+  handleChangeComplete = (color) => {
     this.setState({ background: color.hex });
   };
 
@@ -25,20 +25,20 @@ class CanvasComponent extends React.Component {
     this.updateCanvas();
   }
   updateCanvas() {
-    var isDrawing: boolean, lastPoint: Point;
-    var canvas: HTMLCanvasElement = document.getElementById(
+    let isDrawing: boolean, lastPoint: Point;
+    const canvas: HTMLCanvasElement = document.getElementById(
       "canvas"
     ) as HTMLCanvasElement;
-    var canvasWidth: number = canvas.width;
-    var canvasHeight: number = canvas.height;
-    var ctx: any = canvas.getContext("2d");
-    var jobStart: boolean = false;
-    var canvasPic: any;
-    var pstate: any;
-    var plvalx: number;
-    var plvaly: number;
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const ctx:any = canvas.getContext("2d");
+    let jobStart = false;
+    let canvasPic;
+    let pstate;
+    let plvalx;
+    let plvaly;
 
-    this.setState({ canvas: canvas });
+    this.setState({ canvas });
 
     ctx.beginPath();
     ctx.rect(0, 0, canvasHeight, canvasWidth);
@@ -55,9 +55,9 @@ class CanvasComponent extends React.Component {
       return Math.atan2(point2.x - point1.x, point2.y - point1.y);
     }
 
-    function getMouse(e: any, canvas: any) {
-      var offsetX: number = 0,
-        offsetY: number = 0,
+    function getMouse(e, canvas) {
+      let offsetX = 0,
+        offsetY = 0,
         mx: number,
         my: number;
 
@@ -79,17 +79,17 @@ class CanvasComponent extends React.Component {
       return { x: mx, y: my };
     }
 
-    let handleMouseOut = (e: any) => {
+    let handleMouseOut = (e) => {
       isDrawing = false;
     };
 
-    let handleMouseDown = (e: any) => {
+    let handleMouseDown = (e) => {
       isDrawing = true;
       lastPoint = getMouse(e, canvas);
       jobStart = true;
     };
 
-    let handleMouseMove = (e: any) => {
+    let handleMouseMove = (e) => {
       if (!isDrawing) {
         return;
       }
@@ -160,13 +160,13 @@ class CanvasComponent extends React.Component {
         return;
       }
 
-      var currentPoint: any = getMouse(e, canvas),
-        dist: any = distanceBetween(lastPoint, currentPoint),
-        angle: any = angleBetween(lastPoint, currentPoint),
-        x: any,
-        y: any;
+      var currentPoint = getMouse(e, canvas),
+        dist = distanceBetween(lastPoint, currentPoint),
+        angle = angleBetween(lastPoint, currentPoint),
+        x,
+        y;
 
-      for (var i: number = 0; i < dist; i++) {
+      for (let i = 0; i < dist; i++) {
         x = lastPoint.x + Math.sin(angle) * i - 0;
         y = lastPoint.y + Math.cos(angle) * i - 0;
         ctx.fillStyle = this.state.background;
@@ -177,7 +177,7 @@ class CanvasComponent extends React.Component {
       lastPoint = currentPoint;
     };
 
-    let handleMouseUp = (e: any) => {
+    let handleMouseUp = (e) => {
       isDrawing = false;
     };
 
@@ -222,7 +222,7 @@ class CanvasComponent extends React.Component {
 
           <button
             onClick={() => {
-              const link: any = document.createElement("a");
+              const link = document.createElement("a");
               link.download = "image.png";
               link.href = this.state.canvas.toDataURL();
               link.click();
