@@ -29,6 +29,12 @@ class CanvasComponent extends React.Component {
     const canvas: HTMLCanvasElement = document.getElementById(
       "canvas"
     ) as HTMLCanvasElement;
+    
+    // Setting up width and height of canvas
+    const sizeMax = Math.max(window.innerWidth,window.innerHeight)
+    canvas.width = sizeMax;
+    canvas.height = sizeMax;
+    
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
     const ctx:any = canvas.getContext("2d");
@@ -192,7 +198,7 @@ class CanvasComponent extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <canvas id="canvas" ref="canvas" width={500} height={500} />
+        <canvas id="canvas" ref="canvas"/>
         <div className="toolset">
           <button
             onClick={() => {
@@ -201,6 +207,16 @@ class CanvasComponent extends React.Component {
           >
             Brush
           </button>
+
+          <button
+            onClick={() => {
+              this.setState({ choice: "brush" });
+              this.setState({ background: "#ffffff" });
+            }}
+          >
+            Eraser
+          </button>
+
 
           <button
             onClick={() => {
