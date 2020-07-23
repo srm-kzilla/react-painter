@@ -31,9 +31,8 @@ class CanvasComponent extends React.Component {
     ) as HTMLCanvasElement;
     
     // Setting up width and height of canvas
-    const sizeMax = Math.max(window.innerWidth,window.innerHeight)
-    canvas.width = sizeMax;
-    canvas.height = sizeMax;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
@@ -47,7 +46,7 @@ class CanvasComponent extends React.Component {
     this.setState({ canvas });
 
     ctx.beginPath();
-    ctx.rect(0, 0, canvasHeight, canvasWidth);
+    ctx.rect(0, 0, canvasWidth, canvasHeight);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
