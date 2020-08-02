@@ -1,5 +1,7 @@
 import React from "react";
-import { SketchPicker } from "react-color";
+import { CirclePicker } from "react-color";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEraser, faCircle, faSquare, faPaintBrush, faDownload, faSync } from '@fortawesome/free-solid-svg-icons'
 
 interface Point {
   x: number;
@@ -204,7 +206,7 @@ class CanvasComponent extends React.Component {
               this.setState({ choice: "brush" });
             }}
           >
-            Brush
+            <FontAwesomeIcon icon={faPaintBrush}/>
           </button>
 
           <button
@@ -213,7 +215,7 @@ class CanvasComponent extends React.Component {
               this.setState({ background: "#ffffff" });
             }}
           >
-            Eraser
+            <FontAwesomeIcon icon={faEraser}/>
           </button>
 
 
@@ -222,7 +224,7 @@ class CanvasComponent extends React.Component {
               this.setState({ choice: "rectangle" });
             }}
           >
-            Rectangle
+            <FontAwesomeIcon icon={faSquare}/>
           </button>
 
           <button
@@ -230,10 +232,12 @@ class CanvasComponent extends React.Component {
               this.setState({ choice: "circle" });
             }}
           >
-            Circle
+            <FontAwesomeIcon icon={faCircle}/>
           </button>
 
-          <button onClick={this.updateCanvas.bind(this)}>Clear</button>
+          <button onClick={this.updateCanvas.bind(this)}>
+            <FontAwesomeIcon icon={faSync}/>
+          </button>
 
           <button
             onClick={() => {
@@ -243,9 +247,9 @@ class CanvasComponent extends React.Component {
               link.click();
             }}
           >
-            Download
+            <FontAwesomeIcon icon={faDownload}/>
           </button>
-          <SketchPicker
+          <CirclePicker
             color={this.state.background}
             onChangeComplete={this.handleChangeComplete}
           />
