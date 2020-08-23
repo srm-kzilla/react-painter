@@ -14,11 +14,10 @@ class CanvasComponent extends React.Component {
   constructor(props) {
     super(props);
     this.colorInput = React.createRef();
-    this.colorInput.current.value="#121212";
   }
 
   state = {
-    color: "#121212",
+    color: "#000000",
     choice: "brush",
     canvas: {} as HTMLCanvasElement,
   };
