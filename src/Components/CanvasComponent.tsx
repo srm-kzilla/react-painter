@@ -1,5 +1,4 @@
 import React from "react";
-import { CirclePicker } from "react-color";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faCircle, faSquare, faPaintBrush, faDownload, faSync } from '@fortawesome/free-solid-svg-icons'
 
@@ -8,19 +7,16 @@ interface Point {
   y: number;
 }
 
-interface Color {
-  hex: string;
-}
 
 class CanvasComponent extends React.Component {
   state = {
-    background: "#121212",
+    color: "#121212",
     choice: "brush",
     canvas: {} as HTMLCanvasElement,
   };
 
-  handleChangeComplete = (color) => {
-    this.setState({ background: color.hex });
+  handleChangeComplete = (e) => {
+    this.setState({ color: e.target.value });
   };
 
   componentDidMount() {
@@ -119,7 +115,7 @@ class CanvasComponent extends React.Component {
             plvaly = e.clientY;
           }
           ctx.drawImage(canvasPic, 0, 0);
-          ctx.fillStyle = this.state.background;
+          ctx.fillStyle = this.state.color;
           ctx.beginPath();
           ctx.rect(
             lastPoint.x,
@@ -149,7 +145,7 @@ class CanvasComponent extends React.Component {
             plvaly = e.clientY;
           }
           ctx.drawImage(canvasPic, 0, 0);
-          ctx.fillStyle = this.state.background;
+          ctx.fillStyle = this.state.color;
           ctx.beginPath();
           ctx.arc(
             lastPoint.x,
@@ -176,7 +172,7 @@ class CanvasComponent extends React.Component {
       for (let i = 0; i < dist; i++) {
         x = lastPoint.x + Math.sin(angle) * i - 0;
         y = lastPoint.y + Math.cos(angle) * i - 0;
-        ctx.fillStyle = this.state.background;
+        ctx.fillStyle = this.state.color;
         ctx.beginPath();
         ctx.rect(x, y, 5, 5);
         ctx.fill();
@@ -212,7 +208,7 @@ class CanvasComponent extends React.Component {
           <button
             onClick={() => {
               this.setState({ choice: "brush" });
-              this.setState({ background: "#ffffff" });
+              this.setState({ color: "#ffffff" });
             }}
           >
             <FontAwesomeIcon icon={faEraser}/>
@@ -249,10 +245,7 @@ class CanvasComponent extends React.Component {
           >
             <FontAwesomeIcon icon={faDownload}/>
           </button>
-          <CirclePicker
-            color={this.state.background}
-            onChangeComplete={this.handleChangeComplete}
-          />
+          <input type="color" onChange={this.handleChangeComplete}/>
         </div>
       </React.Fragment>
     );
