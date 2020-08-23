@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Ref } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faCircle, faSquare, faPaintBrush, faDownload, faSync } from '@fortawesome/free-solid-svg-icons'
 
@@ -9,6 +9,13 @@ interface Point {
 
 
 class CanvasComponent extends React.Component {
+  colorInput;
+
+  constructor(props) {
+    super(props);
+    this.colorInput = React.createRef();
+  }
+
   state = {
     color: "#121212",
     choice: "brush",
@@ -207,6 +214,7 @@ class CanvasComponent extends React.Component {
 
           <button
             onClick={() => {
+              this.colorInput.current.value="#ffffff";
               this.setState({ choice: "brush" });
               this.setState({ color: "#ffffff" });
             }}
@@ -245,7 +253,7 @@ class CanvasComponent extends React.Component {
           >
             <FontAwesomeIcon icon={faDownload}/>
           </button>
-          <input type="color" onChange={this.handleChangeComplete}/>
+          <input type="color" ref={this.colorInput} onChange={this.handleChangeComplete}/>
         </div>
       </React.Fragment>
     );
