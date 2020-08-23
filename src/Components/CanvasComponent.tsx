@@ -1,4 +1,4 @@
-import React, { Ref } from "react";
+import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser, faCircle, faSquare, faPaintBrush, faDownload, faSync } from '@fortawesome/free-solid-svg-icons'
 
@@ -14,6 +14,7 @@ class CanvasComponent extends React.Component {
   constructor(props) {
     super(props);
     this.colorInput = React.createRef();
+    this.colorInput.current.value="#121212";
   }
 
   state = {
