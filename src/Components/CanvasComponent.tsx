@@ -1,24 +1,29 @@
 import React from "react";
-import { SketchPicker } from "react-color";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEraser, faCircle, faSquare, faPaintBrush, faDownload, faSync } from '@fortawesome/free-solid-svg-icons'
 
 interface Point {
   x: number;
   y: number;
 }
 
-interface Color {
-  hex: string;
-}
 
 class CanvasComponent extends React.Component {
+  colorInput;
+
+  constructor(props) {
+    super(props);
+    this.colorInput = React.createRef();
+  }
+
   state = {
-    background: "#121212",
+    color: "#000000",
     choice: "brush",
     canvas: {} as HTMLCanvasElement,
   };
 
-  handleChangeComplete = (color) => {
-    this.setState({ background: color.hex });
+  handleChangeComplete = (e) => {
+    this.setState({ color: e.target.value });
   };
 
   componentDidMount() {
@@ -29,6 +34,11 @@ class CanvasComponent extends React.Component {
     const canvas: HTMLCanvasElement = document.getElementById(
       "canvas"
     ) as HTMLCanvasElement;
+    
+    // Setting up width and height of canvas
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
     const ctx:any = canvas.getContext("2d");
@@ -41,7 +51,7 @@ class CanvasComponent extends React.Component {
     this.setState({ canvas });
 
     ctx.beginPath();
-    ctx.rect(0, 0, canvasHeight, canvasWidth);
+    ctx.rect(0, 0, canvasWidth, canvasHeight);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
 
@@ -112,7 +122,7 @@ class CanvasComponent extends React.Component {
             plvaly = e.clientY;
           }
           ctx.drawImage(canvasPic, 0, 0);
-          ctx.fillStyle = this.state.background;
+          ctx.fillStyle = this.state.color;
           ctx.beginPath();
           ctx.rect(
             lastPoint.x,
@@ -142,7 +152,7 @@ class CanvasComponent extends React.Component {
             plvaly = e.clientY;
           }
           ctx.drawImage(canvasPic, 0, 0);
-          ctx.fillStyle = this.state.background;
+          ctx.fillStyle = this.state.color;
           ctx.beginPath();
           ctx.arc(
             lastPoint.x,
@@ -169,7 +179,7 @@ class CanvasComponent extends React.Component {
       for (let i = 0; i < dist; i++) {
         x = lastPoint.x + Math.sin(angle) * i - 0;
         y = lastPoint.y + Math.cos(angle) * i - 0;
-        ctx.fillStyle = this.state.background;
+        ctx.fillStyle = this.state.color;
         ctx.beginPath();
         ctx.rect(x, y, 5, 5);
         ctx.fill();
@@ -192,22 +202,33 @@ class CanvasComponent extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <canvas id="canvas" ref="canvas" width={500} height={500} />
+        <canvas id="canvas" ref="canvas"/>
         <div className="toolset">
           <button
             onClick={() => {
               this.setState({ choice: "brush" });
             }}
           >
-            Brush
+            <FontAwesomeIcon icon={faPaintBrush}/>
           </button>
+
+          <button
+            onClick={() => {
+              this.colorInput.current.value="#ffffff";
+              this.setState({ choice: "brush" });
+              this.setState({ color: "#ffffff" });
+            }}
+          >
+            <FontAwesomeIcon icon={faEraser}/>
+          </button>
+
 
           <button
             onClick={() => {
               this.setState({ choice: "rectangle" });
             }}
           >
-            Rectangle
+            <FontAwesomeIcon icon={faSquare}/>
           </button>
 
           <button
@@ -215,10 +236,12 @@ class CanvasComponent extends React.Component {
               this.setState({ choice: "circle" });
             }}
           >
-            Circle
+            <FontAwesomeIcon icon={faCircle}/>
           </button>
 
-          <button onClick={this.updateCanvas.bind(this)}>Clear</button>
+          <button onClick={this.updateCanvas.bind(this)}>
+            <FontAwesomeIcon icon={faSync}/>
+          </button>
 
           <button
             onClick={() => {
@@ -228,12 +251,9 @@ class CanvasComponent extends React.Component {
               link.click();
             }}
           >
-            Download
+            <FontAwesomeIcon icon={faDownload}/>
           </button>
-          <SketchPicker
-            color={this.state.background}
-            onChangeComplete={this.handleChangeComplete}
-          />
+          <input type="color" ref={this.colorInput} onChange={this.handleChangeComplete}/>
         </div>
       </React.Fragment>
     );

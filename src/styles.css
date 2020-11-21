@@ -2,17 +2,35 @@ body{
 	margin: 0;
 	overflow: hidden;
 }
+.main{
+	height: 100vh;
+	width: 100vw;
+	position: relative;
+	box-shadow: 0 0 5px gray;
+}
 canvas{
 	box-shadow: 0 0 5px gray;
 	cursor: crosshair;
 }
 .toolset{
-	float: right;
+	position: absolute;
+	top: 0;
+	right: 0;
 	display: flex;
 	flex-direction: column;
-	padding: 5px;
 }
-.sketch-picker{
-	width: 115px !Important;
+.toolset > button{
+	height: 30px;
+}
+.circle-picker{
+	border: 1px solid rgba(0,0,0,0.4);
+	background-color: #e5e5e5;
+	text-align: center !important;
+	width: 90px !Important;
 	cursor: pointer;
+}
+.circle-picker > span >div{
+	width: 22px !important;
+	height: 22px !important;
+	margin: 2px !important;
 }
